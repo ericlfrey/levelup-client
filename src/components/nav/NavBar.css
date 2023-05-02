@@ -8,3 +8,10 @@
     flex-basis: 20%;
     list-style-type: none;
 }
+
+.log-reg {
+    margin-left: auto;
+    margin-right: 10%;
+    display: flex;
+    justify-content: space-around;
+}
