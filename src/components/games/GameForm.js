@@ -1,25 +1,42 @@
 import { useState, useEffect } from "react"
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { createGame } from '../../managers/GamesManager.js'
 import { getGameTypes } from "../../managers/GameTypesManager.js"
 import { Button, Form } from "react-bootstrap"
 import "./GameForm.css"
+import { getGameById } from "../../managers/GamesManager.js"
+import { updateGame } from "../../managers/GamesManager.js"
 
 
 export const GameForm = () => {
-  const navigate = useNavigate()
-  const [gameTypes, setGameTypes] = useState([])
-  const [currentGame, setCurrentGame] = useState({
-    skillLevel: 1,
-    numberOfPlayers: 0,
+  const initialState = {
+    skillLevel: '',
+    numberOfPlayers: '',
     title: "",
     maker: "",
     gameTypeId: 0
-  })
+  }
+  const [gameTypes, setGameTypes] = useState([]);
+  const [currentGame, setCurrentGame] = useState(initialState);
+  const navigate = useNavigate();
+  const { gameId } = useParams();
 
   useEffect(() => {
     getGameTypes().then(setGameTypes);
-  }, [])
+    if (gameId) {
+      getGameById(gameId).then((gameObj) => {
+        const gameType = gameObj.game_type.id;
+        setCurrentGame((prevState) => ({
+          ...prevState,
+          skillLevel: gameObj.skill_level,
+          numberOfPlayers: gameObj.number_of_players,
+          title: gameObj.title,
+          maker: gameObj.maker,
+          gameTypeId: gameType
+        }))
+      })
+    }
+  }, [gameId])
 
   const changeGameState = (domEvent) => {
     const { name, value } = domEvent.target;
@@ -69,7 +86,7 @@ export const GameForm = () => {
           value={currentGame.gameTypeId}
           required
         >
-          <option value="">Choose</option>
+          <option value=''>Choose</option>
           {
             gameTypes.map((gameType) => (
               <option
@@ -88,19 +105,31 @@ export const GameForm = () => {
           // Prevent form from being submitted
           evt.preventDefault()
 
-          const game = {
-            maker: currentGame.maker,
-            title: currentGame.title,
-            number_of_players: parseInt(currentGame.numberOfPlayers),
-            skill_level: parseInt(currentGame.skillLevel),
-            game_type: parseInt(currentGame.gameTypeId)
-          }
+          if (gameId) {
+            const payload = {
+              id: gameId,
+              maker: currentGame.maker,
+              title: currentGame.title,
+              number_of_players: parseInt(currentGame.numberOfPlayers),
+              skill_level: parseInt(currentGame.skillLevel),
+              game_type: parseInt(currentGame.gameTypeId)
+            }
+            updateGame(payload).then(() => navigate("/games"))
+          } else {
+            const game = {
+              maker: currentGame.maker,
+              title: currentGame.title,
+              number_of_players: parseInt(currentGame.numberOfPlayers),
+              skill_level: parseInt(currentGame.skillLevel),
+              game_type: parseInt(currentGame.gameTypeId)
+            }
 
-          // Send POST request to your API
-          createGame(game)
-            .then(() => navigate("/games"))
+            // Send POST request to your API
+            createGame(game)
+              .then(() => navigate("/games"))
+          }
         }}
-        className="btn btn-primary">Create</Button>
+        className="btn btn-primary">{gameId ? 'Update' : 'Create'}</Button>
     </Form>
   )
 }
