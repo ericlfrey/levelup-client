@@ -2,18 +2,27 @@ import { useEffect } from "react";
 import { useState } from "react"
 import { getAllEvents } from "../../managers/EventsManager";
 import EventCard from "./EventCard";
+import { Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 
 export default function EventsList() {
   const [events, setEvents] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getAllEvents().then(setEvents);
   }, [])
+
   return (
     <>
       <h1>EventsList</h1>
-      <div>
+      <Button className="btn btn-2 btn-sep icon-create"
+        onClick={() => {
+          navigate({ pathname: "/events/new" })
+        }}
+      >Register New Event</Button>
+      <div className="d-flex flex-wrap justify-content-center">
         {events.map((event) => (
           <EventCard key={event.id} event={event} />
         ))}
