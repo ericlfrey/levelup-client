@@ -30,8 +30,8 @@ export const getAllEvents = () => {
     .then(res => res.json())
 }
 
-export const searchEventsByStatus = (status) => {
-  return fetch(`http://localhost:8000/events?status=${status}`, {
+export const searchEventsByOrganizer = (organizer) => {
+  return fetch(`http://localhost:8000/events?organizer=${organizer}`, {
     headers: {
       Authorization: `Token ${getToken()}`
     }

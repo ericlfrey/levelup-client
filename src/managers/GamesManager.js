@@ -1,16 +1,16 @@
 import { getToken } from "../utils/getToken"
 
-export const getGameById = (id) => {
-  return fetch(`http://localhost:8000/games/${id}`, {
+export const getGameById = async (id) => {
+  const res = await fetch(`http://localhost:8000/games/${id}`, {
     headers: {
       Authorization: `Token ${getToken()}`
     }
   })
-    .then(res => res.json())
+  return await res.json()
 }
 
-export const addGame = (game) => {
-  return fetch("http://localhost:8000/games", {
+export const createGame = async (game) => {
+  const res = await fetch("http://localhost:8000/games", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -18,25 +18,25 @@ export const addGame = (game) => {
     },
     body: JSON.stringify(game)
   })
-    .then(res => res.json())
+  return await res.json()
 }
 
-export const getAllGames = () => {
-  return fetch("http://localhost:8000/games", {
+export const getAllGames = async () => {
+  const res = await fetch("http://localhost:8000/games", {
     headers: {
       Authorization: `Token ${getToken()}`
     }
   })
-    .then(res => res.json())
+  return await res.json()
 }
 
-export const searchGamesByStatus = (status) => {
-  return fetch(`http://localhost:8000/games?status=${status}`, {
+export const searchGamesByStatus = async (status) => {
+  const res = await fetch(`http://localhost:8000/games?status=${status}`, {
     headers: {
       Authorization: `Token ${getToken()}`
     }
   })
-    .then(res => res.json())
+  return await res.json()
 }
 
 export const updateGame = (game) => {
