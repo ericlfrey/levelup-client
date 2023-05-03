@@ -1,16 +1,16 @@
 import { getToken } from "../utils/getToken"
 
-export const getEventById = (id) => {
-  return fetch(`http://localhost:8000/events/${id}`, {
+export const getEventById = async (id) => {
+  const res = await fetch(`http://localhost:8000/events/${id}`, {
     headers: {
       Authorization: `Token ${getToken()}`
     }
   })
-    .then(res => res.json())
+  return await res.json()
 }
 
-export const addEvent = (event) => {
-  return fetch("http://localhost:8000/events", {
+export const createEvent = async (event) => {
+  const res = await fetch("http://localhost:8000/events", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -18,25 +18,25 @@ export const addEvent = (event) => {
     },
     body: JSON.stringify(event)
   })
-    .then(res => res.json())
+  return await res.json()
 }
 
-export const getAllEvents = () => {
-  return fetch("http://localhost:8000/events", {
+export const getAllEvents = async () => {
+  const res = await fetch("http://localhost:8000/events", {
     headers: {
       Authorization: `Token ${getToken()}`
     }
   })
-    .then(res => res.json())
+  return await res.json()
 }
 
-export const searchEventsByOrganizer = (organizer) => {
-  return fetch(`http://localhost:8000/events?organizer=${organizer}`, {
+export const searchEventsByOrganizer = async (organizer) => {
+  const res = await fetch(`http://localhost:8000/events?organizer=${organizer}`, {
     headers: {
       Authorization: `Token ${getToken()}`
     }
   })
-    .then(res => res.json())
+  return await res.json()
 }
 
 export const updateEvent = (event) => {

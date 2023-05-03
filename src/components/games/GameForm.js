@@ -9,12 +9,6 @@ import "./GameForm.css"
 export const GameForm = () => {
   const navigate = useNavigate()
   const [gameTypes, setGameTypes] = useState([])
-
-  /*
-      Since the input fields are bound to the values of
-      the properties of this state variable, you need to
-      provide some default values.
-  */
   const [currentGame, setCurrentGame] = useState({
     skillLevel: 1,
     numberOfPlayers: 0,
@@ -28,7 +22,6 @@ export const GameForm = () => {
   }, [])
 
   const changeGameState = (domEvent) => {
-    // TODO: Complete the onChange function
     const { name, value } = domEvent.target;
     setCurrentGame((prevState) => ({
       ...prevState,
@@ -40,43 +33,35 @@ export const GameForm = () => {
   return (
     <Form className="gameForm">
       <h2 className="gameForm__title">Register New Game</h2>
-      <fieldset>
-        <Form.Group className="form-group">
-          <label htmlFor="title">Title: </label>
-          <input type="text" name="title" required autoFocus className="form-control"
-            value={currentGame.title}
-            onChange={changeGameState}
-          />
-        </Form.Group>
-      </fieldset>
-      <fieldset>
-        <Form.Group className="form-group">
-          <Form.Label htmlFor="maker">Maker: </Form.Label>
-          <Form.Control type="text" name="maker" required className="form-control"
-            value={currentGame.maker}
-            onChange={changeGameState}
-          />
-        </Form.Group>
-      </fieldset>
-      <fieldset>
-        <Form.Group className="form-group">
-          <Form.Label htmlFor="numberOfPlayers">Number of Players: </Form.Label>
-          <Form.Control type="number" name="numberOfPlayers" min="1" required className="form-control"
-            value={currentGame.numberOfPlayers}
-            onChange={changeGameState}
-          />
-        </Form.Group>
-      </fieldset>
-      <fieldset>
-        <Form.Group className="form-group">
-          <Form.Label htmlFor="skillLevel">Skill Level: </Form.Label>
-          <Form.Control type="number" name="skillLevel" min="1" max="5" required className="form-control"
-            value={currentGame.skillLevel}
-            onChange={changeGameState}
-          />
-        </Form.Group>
-      </fieldset>
-      <Form.Group className="mb-3">
+      <Form.Group >
+        <Form.Label htmlFor="title">Title: </Form.Label>
+        <Form.Control type="text" name="title" required autoFocus
+          value={currentGame.title}
+          onChange={changeGameState}
+        />
+      </Form.Group>
+      <Form.Group className="form-group">
+        <Form.Label htmlFor="maker">Maker: </Form.Label>
+        <Form.Control type="text" name="maker" required
+          value={currentGame.maker}
+          onChange={changeGameState}
+        />
+      </Form.Group>
+      <Form.Group className="form-group">
+        <Form.Label htmlFor="numberOfPlayers">Number of Players: </Form.Label>
+        <Form.Control type="number" name="numberOfPlayers" min="1" required className="form-control"
+          value={currentGame.numberOfPlayers}
+          onChange={changeGameState}
+        />
+      </Form.Group>
+      <Form.Group >
+        <Form.Label htmlFor="skillLevel">Skill Level: </Form.Label>
+        <Form.Control type="number" name="skillLevel" min="1" max="5" required className="form-control"
+          value={currentGame.skillLevel}
+          onChange={changeGameState}
+        />
+      </Form.Group>
+      <Form.Group >
         <Form.Label>Select Game Type</Form.Label>
         <Form.Select
           name="gameTypeId"
