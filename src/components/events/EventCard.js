@@ -1,4 +1,5 @@
 import { Card } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 export default function EventCard({ event }) {
   return (
@@ -9,6 +10,9 @@ export default function EventCard({ event }) {
           <Card.Text>{event.date}</Card.Text>
           <Card.Text>{event.time}</Card.Text>
           <Card.Text>Game: {event.game.title}</Card.Text>
+          <Link key={`event--${event.id}`} to={`/edit_event/${event.id}`} >
+            <Card.Text>Edit</Card.Text>
+          </Link>
         </Card.Body>
       </Card>
     </>
