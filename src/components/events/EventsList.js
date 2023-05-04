@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useState } from "react"
-import { deleteEvent, getAllEvents } from "../../managers/EventsManager";
+import { getAllEvents } from "../../managers/EventsManager";
 import EventCard from "./EventCard";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -17,11 +17,7 @@ export default function EventsList() {
   useEffect(() => {
     getAllTheEvents();
   }, [])
-  const handleDelete = (eventId) => {
-    deleteEvent(eventId).then(() => {
-      getAllTheEvents();
-    })
-  }
+
 
   return (
     <>
@@ -33,7 +29,7 @@ export default function EventsList() {
       >Register New Event</Button>
       <div className="d-flex flex-wrap justify-content-center">
         {events.map((event) => (
-          <EventCard key={event.id} event={event} handleDelete={handleDelete} />
+          <EventCard key={event.id} event={event} refreshPage={getAllTheEvents} />
         ))}
       </div>
     </>
