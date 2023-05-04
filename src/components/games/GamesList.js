@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useState } from "react"
-import { getAllGames } from "../../managers/GamesManager";
+import { deleteGame, getAllGames } from "../../managers/GamesManager";
 import GameCard from "./GameCard";
 import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
@@ -10,9 +10,20 @@ export default function EventsList() {
   const [games, setGames] = useState([]);
   const navigate = useNavigate();
 
-  useEffect(() => {
+  const getAllTheGames = () => {
     getAllGames().then(setGames);
+  }
+
+  const handleDelete = (gameId) => {
+    deleteGame(gameId).then(() => {
+      getAllTheGames();
+    })
+  }
+
+  useEffect(() => {
+    getAllTheGames();
   }, [])
+
   return (
     <>
       <h1>GamesList</h1>
@@ -23,7 +34,7 @@ export default function EventsList() {
       >Register New Game</Button>
       <div className="d-flex flex-wrap justify-content-center">
         {games.map((game) => (
-          <GameCard key={game.id} game={game} />
+          <GameCard key={game.id} game={game} handleDelete={handleDelete} />
         ))}
       </div>
     </>
