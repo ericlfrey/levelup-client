@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getAllGames } from "../../managers/GamesManager";
 import "./Events.css"
-import { createEvent } from "../../managers/EventsManager";
+import { createEvent, getEventById, updateEvent } from "../../managers/EventsManager";
 
 export default function EventForm() {
   const initialState = {
@@ -15,10 +15,23 @@ export default function EventForm() {
   const [formInput, setFormInput] = useState(initialState);
   const [games, setGames] = useState([]);
   const navigate = useNavigate();
+  const { eventId } = useParams();
 
   useEffect(() => {
     getAllGames().then(setGames);
-  }, [])
+    if (eventId) {
+      getEventById(eventId).then((eventObj) => {
+        const game = eventObj.game.id;
+        setFormInput((prevState) => ({
+          ...prevState,
+          description: eventObj.description,
+          date: eventObj.date,
+          time: eventObj.time,
+          gameId: game
+        }));
+      })
+    }
+  }, [eventId])
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,15 +43,26 @@ export default function EventForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const event = {
-      description: formInput.description,
-      date: formInput.date,
-      time: formInput.time,
-      game: parseInt(formInput.gameId)
-    }
 
-    createEvent(event)
-      .then(() => navigate("/events"))
+    if (eventId) {
+      const payload = {
+        id: eventId,
+        description: formInput.description,
+        date: formInput.date,
+        time: formInput.time,
+        game: parseInt(formInput.gameId)
+      }
+      updateEvent(payload).then(() => navigate("/events"));
+    } else {
+      const event = {
+        description: formInput.description,
+        date: formInput.date,
+        time: formInput.time,
+        game: parseInt(formInput.gameId)
+      }
+      createEvent(event)
+        .then(() => navigate("/events"))
+    }
   }
 
   return (
@@ -96,7 +120,7 @@ export default function EventForm() {
           ))
         }
       </Form.Select>
-      <Button type="submit">Create</Button>
+      <Button type="submit">{eventId ? 'Edit' : 'Create'}</Button>
     </Form>
   )
 }
